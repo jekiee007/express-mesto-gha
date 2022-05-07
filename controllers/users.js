@@ -2,6 +2,7 @@ const User = require('../models/user');
 
 const ERROR_NOT_FOUND = 404;
 const ERROR_ID_NOT_FOUND = 400;
+const ERROR_DEFAULT_CODE = 500;
 
 // GET /users — возвращает всех пользователей
 module.exports.getUsers = (req, res, next) => {
@@ -16,10 +17,11 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
-      if (!data) {
-        throw res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      }
       res.send(data);
+    }).catch((err) => {
+      if (err.name === 'ERROR_NOT_FOUND') {
+        console.log(`error: ${err.name}`);
+      }
     })
     .catch(next);
 };

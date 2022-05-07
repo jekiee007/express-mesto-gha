@@ -2,6 +2,7 @@ const Card = require('../models/card');
 
 const ERROR_NOT_FOUND = 404;
 const ERROR_ID_NOT_FOUND = 400;
+const ERROR_DEFAULT_CODE = 500;
 
 // GET /cards — возвращает все карточки
 module.exports.getCards = (req, res, next) => {
