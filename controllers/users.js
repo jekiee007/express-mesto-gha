@@ -1,7 +1,7 @@
 const User = require('../models/user');
 
-const ERROR_NOT_FOUND = 400;
-const ERROR_ID_NOT_FOUND = 404;
+const ERROR_NOT_FOUND = 404;
+const ERROR_ID_NOT_FOUND = 400;
 
 // GET /users — возвращает всех пользователей
 module.exports.getUsers = (req, res, next) => {
