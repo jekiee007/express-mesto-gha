@@ -25,10 +25,10 @@ module.exports.createCard = (req, res, next) => {
       res.send(data);
     })
     .catch(() => {
-      if (!req.user._id) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
+      if (!req.params._id) {
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
@@ -44,10 +44,10 @@ module.exports.deleteCard = (req, res, next) => {
       res.send(data);
     })
     .catch(() => {
-      if (!req.user._id) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
+      if (!req.params._id) {
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
@@ -62,10 +62,10 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   res.send(data);
 })
   .catch(() => {
-    if (!req.user._id) {
-      return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
+    if (!req.params._id) {
+      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
     } if (!req.body) {
-      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
+      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
     } return res.status(ERROR_SERVER).send({ message: 'Server error' });
   })
   .catch(next);
@@ -79,10 +79,10 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   res.send(data);
 })
   .catch(() => {
-    if (!req.user._id) {
-      return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
+    if (!req.params._id) {
+      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
     } if (!req.body) {
-      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
+      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
     } return res.status(ERROR_SERVER).send({ message: 'Server error' });
   })
   .catch(next);
