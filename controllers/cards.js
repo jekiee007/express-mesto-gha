@@ -23,7 +23,7 @@ module.exports.createCard = (req, res, next) => {
   })
     .then((data) => {
       if (data) { res.send(data); }
-      if (!req.user.id) {
+      if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
@@ -40,7 +40,7 @@ module.exports.deleteCard = (req, res, next) => {
   })
     .then((data) => {
       if (data) { res.send(data); }
-      if (!req.user.id) {
+      if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
@@ -56,7 +56,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 ).then((data) => {
   if (data) { res.send(data); }
-  if (!req.user.id) {
+  if (!req.user._id) {
     return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
   } if (!req.body) {
     return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
@@ -71,7 +71,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 ).then((data) => {
   if (data) { res.send(data); }
-  if (!req.user.id) {
+  if (!req.user._id) {
     return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
   } if (!req.body) {
     return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
