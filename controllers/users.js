@@ -1,8 +1,8 @@
 const User = require('../models/user');
 
-const ERROR_NOT_FOUND = 404;
-const ERROR_ID_NOT_FOUND = 400;
-const ERROR_DEFAULT_CODE = 500;
+const ERROR_NOT_FOUND = 400;
+const ERROR_ID_NOT_FOUND = 404;
+const ERROR_SERVER = 500;
 
 // GET /users — возвращает всех пользователей
 module.exports.getUsers = (req, res, next) => {
@@ -18,10 +18,12 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
       res.send(data);
-    }).catch((err) => {
-      if (err.name === 'ERROR_NOT_FOUND') {
-        console.log(`error: ${err.name}`);
-      }
+    }).catch(() => {
+      if (!req.user._id) {
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+      } if (!req.body) {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
 };
@@ -35,9 +37,6 @@ module.exports.createUser = (req, res, next) => {
     avatar,
   })
     .then((data) => {
-      if (!data) {
-        throw res.status(ERROR_NOT_FOUND).send({ message: 'Incorrected data' });
-      }
       res.send(data);
     })
     .catch(next);
@@ -51,10 +50,13 @@ module.exports.updateUserInfo = (req, res, next) => {
     about,
   })
     .then((data) => {
-      if (!data) {
-        throw res.status(ERROR_NOT_FOUND).send({ message: 'Incorrected data' });
-      }
       res.send(data);
+    }).catch(() => {
+      if (!req.user._id) {
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+      } if (!req.body) {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
 };
@@ -64,10 +66,14 @@ module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((data) => {
-      if (!data) {
-        throw res.status(ERROR_NOT_FOUND).send({ message: 'Incorrected data' });
-      }
       res.send(data);
+    })
+    .catch(() => {
+      if (!req.user._id) {
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+      } if (!req.body) {
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
 };

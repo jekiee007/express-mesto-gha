@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
+    validate: {
+      validator: (v) => /https?:\/\/(w{3}\.)?[\w\-.~:/?#[\]@!$&'\\()*+,;=]/.test(v),
+      message: 'Не верно указан адрес.',
+    },
     required: true,
   },
 });
