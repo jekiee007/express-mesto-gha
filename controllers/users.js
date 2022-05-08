@@ -20,9 +20,9 @@ module.exports.getUser = (req, res, next) => {
       res.send(data);
     }).catch(() => {
       if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
@@ -53,9 +53,9 @@ module.exports.updateUserInfo = (req, res, next) => {
       res.send(data);
     }).catch(() => {
       if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
@@ -70,9 +70,9 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .catch(() => {
       if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
     .catch(next);
