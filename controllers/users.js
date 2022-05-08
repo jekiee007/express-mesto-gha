@@ -17,12 +17,12 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
-      if (data) {
-        res.send(data);
-      } else
-      if (req.status === 'Bad Request') {
+      if (data) { res.send(data); }
+    })
+    .catch((err) => {
+      if (err.name === 'Bad Request') {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (req.status === 'Not Found') {
+      } if (err.name === 'Not Found') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -51,12 +51,12 @@ module.exports.updateUserInfo = (req, res, next) => {
     about,
   })
     .then((data) => {
-      if (data) {
-        res.send(data);
-      } else
-      if (req.status === 'Bad Request') {
+      if (data) { res.send(data); }
+    })
+    .catch((err) => {
+      if (err.name === 'Bad Request') {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (req.status === 'Not Found') {
+      } if (err.name === 'Not Found') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -68,10 +68,12 @@ module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((data) => {
-      if (data) { res.send(data); } else
-      if (req.status === 'Bad Request') {
+      if (data) { res.send(data); }
+    })
+    .catch((err) => {
+      if (err.name === 'Bad Request') {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (req.status === 'Not Found') {
+      } if (err.name === 'Not Found') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })

@@ -22,10 +22,12 @@ module.exports.createCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      if (data) { res.send(data); } else
-      if (req.status === 'Bad Request') {
+      if (data) { res.send(data); }
+    })
+    .catch((err) => {
+      if (err.name === 'Bad Request') {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (req.status === 'Not Found') {
+      } if (err.name === 'Not Found') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -39,10 +41,12 @@ module.exports.deleteCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      if (data) { res.send(data); } else
-      if (req.status === 'Bad Request') {
+      if (data) { res.send(data); }
+    })
+    .catch((err) => {
+      if (err.name === 'Bad Request') {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (req.status === 'Not Found') {
+      } if (err.name === 'Not Found') {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -55,13 +59,15 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 ).then((data) => {
-  if (data) { res.send(data); } else
-  if (!req.params._id) {
-    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-  } if (!req.body) {
-    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  if (data) { res.send(data); }
 })
+  .catch((err) => {
+    if (err.name === 'Bad Request') {
+      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+    } if (err.name === 'Not Found') {
+      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+    } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  })
   .catch(next);
 
 // DELETE /cards/:cardId/likes — убрать лайк с карточки
@@ -70,11 +76,13 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 ).then((data) => {
-  if (data) { res.send(data); } else
-  if (req.status === 'Bad Request') {
-    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-  } if (req.status === 'Not Found') {
-    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  if (data) { res.send(data); }
 })
+  .catch((err) => {
+    if (err.name === 'Bad Request') {
+      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+    } if (err.name === 'Not Found') {
+      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+    } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  })
   .catch(next);
