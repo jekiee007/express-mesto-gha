@@ -18,8 +18,6 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
       if (data) { res.send(data); }
-    })
-    .catch(() => {
       if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -52,8 +50,6 @@ module.exports.updateUserInfo = (req, res, next) => {
   })
     .then((data) => {
       if (data) { res.send(data); }
-    })
-    .catch(() => {
       if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -69,8 +65,6 @@ module.exports.updateUserAvatar = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((data) => {
       if (data) { res.send(data); }
-    })
-    .catch(() => {
       if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {

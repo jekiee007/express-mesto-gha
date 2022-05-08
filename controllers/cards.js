@@ -23,8 +23,6 @@ module.exports.createCard = (req, res, next) => {
   })
     .then((data) => {
       if (data) { res.send(data); }
-    })
-    .catch(() => {
       if (!req.user.id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -42,8 +40,6 @@ module.exports.deleteCard = (req, res, next) => {
   })
     .then((data) => {
       if (data) { res.send(data); }
-    })
-    .catch(() => {
       if (!req.user.id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -60,14 +56,12 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 ).then((data) => {
   if (data) { res.send(data); }
+  if (!req.user.id) {
+    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+  } if (!req.body) {
+    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
 })
-  .catch(() => {
-    if (!req.user.id) {
-      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-    } if (!req.body) {
-      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-    } return res.status(ERROR_SERVER).send({ message: 'Server error' });
-  })
   .catch(next);
 
 // DELETE /cards/:cardId/likes — убрать лайк с карточки
@@ -77,12 +71,10 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 ).then((data) => {
   if (data) { res.send(data); }
+  if (!req.user.id) {
+    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+  } if (!req.body) {
+    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
 })
-  .catch(() => {
-    if (!req.user.id) {
-      return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-    } if (!req.body) {
-      return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-    } return res.status(ERROR_SERVER).send({ message: 'Server error' });
-  })
   .catch(next);
