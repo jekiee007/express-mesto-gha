@@ -19,10 +19,10 @@ module.exports.getUser = (req, res, next) => {
     .then((data) => {
       if (data) { res.send(data); }
     })
-    .catch((err) => {
-      if (err.name === 'Bad Request') {
+    .catch(() => {
+      if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (err.name === 'Not Found') {
+      } if (!req.body) {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -53,10 +53,10 @@ module.exports.updateUserInfo = (req, res, next) => {
     .then((data) => {
       if (data) { res.send(data); }
     })
-    .catch((err) => {
-      if (err.name === 'Bad Request') {
+    .catch(() => {
+      if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (err.name === 'Not Found') {
+      } if (!req.body) {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
@@ -70,10 +70,10 @@ module.exports.updateUserAvatar = (req, res, next) => {
     .then((data) => {
       if (data) { res.send(data); }
     })
-    .catch((err) => {
-      if (err.name === 'Bad Request') {
+    .catch(() => {
+      if (!req.user._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (err.name === 'Not Found') {
+      } if (!req.body) {
         return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
       } return res.status(ERROR_SERVER).send({ message: 'Server error' });
     })
