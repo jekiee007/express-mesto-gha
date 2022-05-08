@@ -22,9 +22,7 @@ module.exports.createCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      res.send(data);
-    })
-    .catch(() => {
+      if (data) { res.send(data); } else
       if (!req.params._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -41,7 +39,7 @@ module.exports.deleteCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      res.send(data);
+      if (data) { res.send(data); } else
       if (!req.params._id) {
         return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
       } if (!req.body) {
@@ -57,7 +55,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 ).then((data) => {
-  res.send(data);
+  if (data) { res.send(data); } else
   if (!req.params._id) {
     return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
   } if (!req.body) {
@@ -72,7 +70,7 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 ).then((data) => {
-  res.send(data);
+  if (data) { res.send(data); } else
   if (!req.params._id) {
     return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
   } if (!req.body) {
