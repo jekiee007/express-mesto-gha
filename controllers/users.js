@@ -10,6 +10,7 @@ module.exports.getUsers = (req, res, next) => {
     .then((data) => {
       res.send(data);
     })
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }))
     .catch(next);
 };
 
@@ -17,7 +18,7 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
-      if (data) { res.send(data); }
+      res.send(data);
     }).catch((err) => {
       if (err.name === 'ValidationError') {
         if (!req.user._id) {
@@ -40,7 +41,7 @@ module.exports.createUser = (req, res, next) => {
       res.send(data);
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        if (!User.name) {
+        if (!res.data) {
           res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
         }
       }

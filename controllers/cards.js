@@ -55,17 +55,12 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 ).then((data) => {
-  if (data) { res.send(data); }
+  res.send(data);
 })
   .catch((err) => {
     if (err.name === 'ValidationError') {
       res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
     }
-  // if (!req.user._id) {
-  //   return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-  // } if (!req.body) {
-  //   return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-  // } return res.status(ERROR_SERVER).send({ message: 'Server error' });
   })
   .catch(next);
 
