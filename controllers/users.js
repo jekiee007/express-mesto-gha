@@ -13,8 +13,8 @@ module.exports.getUsers = (req, res, next) => {
       }
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(ERROR_NOT_FOUND).send({ message: ' Переданы некорректные данные при создании пользователя' });
-      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
+        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
+      } res.status(500).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
@@ -26,8 +26,8 @@ module.exports.getUser = (req, res, next) => {
       if (data) { res.send(data); }
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(ERROR_NOT_FOUND).send({ message: ' Переданы некорректные данные при создании пользователя' });
-      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
+        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+      } res.status(500).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
