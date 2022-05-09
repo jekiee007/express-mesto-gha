@@ -27,18 +27,6 @@ app.use((req, res, next) => {
 app.use('/', cards);
 app.use('/', users);
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'Server was broken =('
-        : message,
-    });
-  next();
-});
-
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
