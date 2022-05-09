@@ -10,7 +10,11 @@ module.exports.getUsers = (req, res, next) => {
     .then((data) => {
       res.send(data);
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(500).send({ message: 'Произошла ошибка' });
+      }
+    })
     .catch(next);
 };
 
