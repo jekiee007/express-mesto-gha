@@ -8,7 +8,13 @@ const ERROR_SERVER = 500;
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((data) => {
-      res.send(data);
+      if (data) {
+        res.send(data);
+      }
+    }).catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(ERROR_NOT_FOUND).send({ message: ' Переданы некорректные данные при создании пользователя' });
+      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
@@ -18,11 +24,10 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
       if (data) { res.send(data); }
-      if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+    }).catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(ERROR_NOT_FOUND).send({ message: ' Переданы некорректные данные при создании пользователя' });
+      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
