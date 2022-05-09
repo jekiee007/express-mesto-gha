@@ -56,12 +56,17 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { new: true },
 ).then((data) => {
   if (data) { res.send(data); }
-  if (!req.user._id) {
-    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-  } if (!req.body) {
-    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
 })
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+    }
+  // if (!req.user._id) {
+  //   return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+  // } if (!req.body) {
+  //   return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+  // } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  })
   .catch(next);
 
 // DELETE /cards/:cardId/likes — убрать лайк с карточки
