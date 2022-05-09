@@ -24,13 +24,11 @@ module.exports.createCard = (req, res, next) => {
     .then((data) => {
       res.send(data);
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        if (!res.data) {
-          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
-        }
-      }
-    })
+    // .catch((err) => {
+    //   if (err.name === 'ValidationError') {
+    //     res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+    //   }
+    // })
     .catch(next);
 };
 
