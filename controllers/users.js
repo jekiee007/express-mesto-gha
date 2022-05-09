@@ -8,13 +8,7 @@ const ERROR_SERVER = 500;
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((data) => {
-      if (data) {
-        res.send(data);
-      }
-    }).catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
-      } res.status(500).send({ message: 'Ошибка по умолчанию' });
+      res.send(data);
     })
     .catch(next);
 };
@@ -26,7 +20,9 @@ module.exports.getUser = (req, res, next) => {
       if (data) { res.send(data); }
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        if (!req.user._id) {
+          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        }
       } res.status(500).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
@@ -42,6 +38,12 @@ module.exports.createUser = (req, res, next) => {
   })
     .then((data) => {
       res.send(data);
+    }).catch((err) => {
+      if (err.name === 'ValidationError') {
+        if (!User.name) {
+          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        }
+      }
     })
     .catch(next);
 };
@@ -54,12 +56,12 @@ module.exports.updateUserInfo = (req, res, next) => {
     about,
   })
     .then((data) => {
-      if (data) { res.send(data); }
-      if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+      res.send(data);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+      } res.status(500).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
@@ -69,12 +71,17 @@ module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((data) => {
-      if (data) { res.send(data); }
-      if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+      res.send(data);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        if (!req.user._id) {
+          res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+        }
+        if (!req.body) {
+          res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
+        } res.status(ERROR_SERVER).send({ message: 'Server error' });
+      }
     })
     .catch(next);
 };
