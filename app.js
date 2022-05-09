@@ -13,6 +13,9 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+app.use(bodyParser.json()); // для собирания JSON-формата
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use((req, res, next) => {
   req.user = {
     _id: '62753360cbda1869b6973588', // _id созданного пользователя
@@ -20,9 +23,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
-app.use(bodyParser.json()); // для собирания JSON-формата
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', cards);
 app.use('/', users);

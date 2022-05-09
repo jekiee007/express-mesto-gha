@@ -1,8 +1,8 @@
 const Card = require('../models/card');
 
-const ERROR_NOT_FOUND = 400;
-const ERROR_ID_NOT_FOUND = 404;
-const ERROR_SERVER = 500;
+// const ERROR_NOT_FOUND = 400;
+// const ERROR_ID_NOT_FOUND = 404;
+// const ERROR_SERVER = 500;
 
 // GET /cards — возвращает все карточки
 module.exports.getCards = (req, res, next) => {
@@ -22,12 +22,14 @@ module.exports.createCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      if (data) { res.send(data); }
-      if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+      res.send(data);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        if (!res.data) {
+          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        }
+      }
     })
     .catch(next);
 };
@@ -39,12 +41,14 @@ module.exports.deleteCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      if (data) { res.send(data); }
-      if (!req.user._id) {
-        return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-      } if (!req.body) {
-        return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-      } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+      res.send(data);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        if (!res.data) {
+          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        }
+      }
     })
     .catch(next);
 };
@@ -59,7 +63,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
 })
   .catch((err) => {
     if (err.name === 'ValidationError') {
-      res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+      res.status(404).send({ message: 'Id not found' });
     }
   })
   .catch(next);
@@ -70,11 +74,11 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 ).then((data) => {
-  if (data) { res.send(data); }
-  if (!req.user._id) {
-    return res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
-  } if (!req.body) {
-    return res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-  } return res.status(ERROR_SERVER).send({ message: 'Server error' });
+  res.send(data);
 })
+  .catch((err) => {
+    if (err.name === 'ValidationError') {
+      res.status(404).send({ message: 'Id not found' });
+    }
+  })
   .catch(next);
