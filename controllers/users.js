@@ -24,10 +24,9 @@ module.exports.getUser = (req, res, next) => {
     .then((data) => {
       res.send(data);
     }).catch((err) => {
-      if (err.name === 'ValidationError') {
-        if (!req.user._id) {
-          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
-        }
+      console.log(err.name);
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } res.status(500).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
@@ -45,9 +44,7 @@ module.exports.createUser = (req, res, next) => {
       res.send(data);
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        if (!res.data) {
-          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
-        }
+        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
       }
     })
     .catch(next);
@@ -59,6 +56,10 @@ module.exports.updateUserInfo = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, {
     name,
     about,
+  }, {
+    new: true, // обработчик then получит на вход обновлённую запись
+    runValidators: true, // данные будут валидированы перед изменением
+    upsert: true, // если пользователь не найден, он будет создан
   })
     .then((data) => {
       res.send(data);
@@ -74,7 +75,11 @@ module.exports.updateUserInfo = (req, res, next) => {
 // PATCH /users/me/avatar — обновляет аватар
 module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }, {
+    new: true, // обработчик then получит на вход обновлённую запись
+    runValidators: true, // данные будут валидированы перед изменением
+    upsert: true, // если пользователь не найден, он будет создан
+  })
     .then((data) => {
       res.send(data);
     })
