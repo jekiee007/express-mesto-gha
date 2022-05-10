@@ -22,12 +22,14 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
-      res.send(data);
+      if (data != null) {
+        res.send(data);
+      } else res.status(404).send({ message: 'Пользователь с таким Id не найден' });
     }).catch((err) => {
       console.log(err.name);
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
-      } res.status(500).send({ message: 'Ошибка по умолчанию' });
+      }
     })
     .catch(next);
 };
