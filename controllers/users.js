@@ -22,9 +22,9 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((data) => {
-      if (data != null) {
+      if (data) {
         res.send(data);
-      } else throw new Error(res.status(404).send({ message: 'Пользователь с таким Id не найден' }));
+      } else res.status(404).send({ message: 'Пользователь с таким Id не найден' });
     }).catch((err) => {
       console.log(err.name);
       if (err.name === 'CastError') {
