@@ -43,11 +43,10 @@ module.exports.deleteCard = (req, res, next) => {
       res.send(data);
     })
     .catch((err) => {
-      console.log(err.name);
-      if (err.name === 'ValidationError') {
-        if (!res.data) {
-          res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
-        }
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Карточка с таким Id не найдена' });
+      } else if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные при удалении карточки' });
       }
     })
     .catch(next);
@@ -62,7 +61,6 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   res.send(data);
 })
   .catch((err) => {
-    console.log(err.name);
     if (err.name === 'CastError') {
       res.status(404).send({ message: 'Карточка с таким Id не найдена' });
     }
@@ -75,9 +73,12 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 ).then((data) => {
-  res.send(data);
+  if (data != null) {
+    res.send(data);
+  } else res.status(404).send({ message: 'Карточка с таким Id не найдена' });
 })
   .catch((err) => {
+    console.log(err.name);
     if (err.name === 'CastError') {
       res.status(404).send({ message: 'Карточка с таким Id не найдена' });
     }
