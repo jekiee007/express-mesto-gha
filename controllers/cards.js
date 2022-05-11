@@ -65,7 +65,9 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   console.log(data);
   if (data != null) {
     res.send(data);
-  } throw new Error(res.status(404).send({ message: 'Карточка с таким Id не найдена' }));
+  } else {
+    res.status(404).send({ message: 'Карточка с таким Id не найдена' });
+  }
 })
   .catch((err) => {
     console.log(err.name);
@@ -84,7 +86,9 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   console.log(data);
   if (data != null) {
     res.send(data);
-  } else throw new Error(res.status(404).send({ message: 'Карточка с таким Id не найдена' }));
+  } else {
+    res.status(404).send({ message: 'Карточка с таким Id не найдена' });
+  }
 })
   .catch((err) => {
     console.log(err.name);
