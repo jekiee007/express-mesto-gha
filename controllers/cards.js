@@ -24,7 +24,6 @@ module.exports.createCard = (req, res, next) => {
       res.send(data);
     })
     .catch((err) => {
-      console.log(err.name);
       if (err.name === 'ValidationError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные при создании карточки' });
       }
@@ -39,7 +38,6 @@ module.exports.deleteCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      console.log(data);
       if (data != null) {
         res.send(data);
       } else {
@@ -47,7 +45,6 @@ module.exports.deleteCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      console.log(err.name);
       if (err.name === 'CastError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с таким Id не найдена' });
       }
@@ -61,7 +58,6 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
   { new: true },
 ).then((data) => {
-  console.log(data);
   if (data != null) {
     res.send(data);
   } else {
@@ -69,7 +65,6 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   }
 })
   .catch((err) => {
-    console.log(err.name);
     if (err.name === 'CastError') {
       res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с таким Id не найдена' });
     }
@@ -82,7 +77,6 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   { $pull: { likes: req.user._id } }, // убрать _id из массива
   { new: true },
 ).then((data) => {
-  console.log(data);
   if (data != null) {
     res.send(data);
   } else {
@@ -90,7 +84,6 @@ module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
   }
 })
   .catch((err) => {
-    console.log(err.name);
     if (err.name === 'CastError') {
       res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с таким Id не найдена' });
     }

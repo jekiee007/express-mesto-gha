@@ -26,7 +26,6 @@ module.exports.getUser = (req, res, next) => {
         res.send(data);
       } else res.status(ERROR_ID_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
     }).catch((err) => {
-      console.log(err.name);
       if (err.name === 'CastError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
       }
