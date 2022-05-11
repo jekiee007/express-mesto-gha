@@ -40,14 +40,17 @@ module.exports.deleteCard = (req, res, next) => {
     owner: req.user._id,
   })
     .then((data) => {
-      res.send(data);
+      console.log(data);
+      if (data != null) {
+        res.send(data);
+      } else {
+        res.status(404).send({ message: 'Переданы некорректные данные при удалении карточки' });
+      }
     })
     .catch((err) => {
       console.log(err.name);
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Карточка с таким Id не найдена' });
-      } else if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при удалении карточки' });
+        res.status(400).send({ message: 'Карточка с таким Id не найдена' });
       }
     })
     .catch(next);
@@ -62,7 +65,7 @@ module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
   console.log(data);
   if (data != null) {
     res.send(data);
-  } throw new Error(res.status(400).send({ message: 'Карточка с таким Id не найдена' }));
+  } throw new Error(res.status(404).send({ message: 'Карточка с таким Id не найдена' }));
 })
   .catch((err) => {
     console.log(err.name);
