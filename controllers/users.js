@@ -12,7 +12,7 @@ module.exports.getUsers = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(500).send({ message: 'Произошла ошибка' });
+        res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
       }
     })
     .catch(next);
@@ -24,11 +24,11 @@ module.exports.getUser = (req, res, next) => {
     .then((data) => {
       if (data) {
         res.send(data);
-      } else res.status(404).send({ message: 'Пользователь с таким Id не найден' });
+      } else res.status(ERROR_ID_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
     }).catch((err) => {
       console.log(err.name);
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
       }
     })
     .catch(next);
@@ -46,7 +46,7 @@ module.exports.createUser = (req, res, next) => {
       res.send(data);
     }).catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные' });
       }
     })
     .catch(next);
@@ -68,8 +68,8 @@ module.exports.updateUserInfo = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: ' Переданы некорректные данные при создании пользователя' });
-      } res.status(500).send({ message: 'Ошибка по умолчанию' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные' });
+      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
     })
     .catch(next);
 };
@@ -88,11 +88,11 @@ module.exports.updateUserAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         if (!req.user._id) {
-          res.status(ERROR_ID_NOT_FOUND).send({ message: 'Id not found' });
+          res.status(ERROR_ID_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
         }
         if (!req.body) {
-          res.status(ERROR_NOT_FOUND).send({ message: 'Data error' });
-        } res.status(ERROR_SERVER).send({ message: 'Server error' });
+          res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные' });
+        } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
       }
     })
     .catch(next);
