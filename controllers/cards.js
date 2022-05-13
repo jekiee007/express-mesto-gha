@@ -7,12 +7,14 @@ const {
 } = require('../utils/constants');
 
 // GET /cards — возвращает все карточки
-module.exports.getCards = (req, res, next) => {
+module.exports.getCards = (req, res) => {
   Card.find({})
     .then((data) => {
       res.send(data);
     })
-    .catch(next);
+    .catch(() => {
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 // POST /cards — создаёт карточку
