@@ -46,12 +46,12 @@ module.exports.deleteCard = (req, res) => {
       if (data != null) {
         res.send(data);
       } else {
-        res.status(ERROR_ID_NOT_FOUND).send({ message: 'Переданы некорректные данные при удалении карточки' });
+        res.status(ERROR_ID_NOT_FOUND).send({ message: 'Карточка с таким Id не найдена' });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Карточка с таким Id не найдена' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные при удалении карточки' });
       } else {
         res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
       }

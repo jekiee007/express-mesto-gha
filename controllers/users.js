@@ -68,7 +68,9 @@ module.exports.updateUserInfo = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные' });
-      } res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
+      } else {
+        res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
+      }
     });
 };
 
@@ -84,11 +86,9 @@ module.exports.updateUserAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        if (!req.user._id) {
-          res.status(ERROR_ID_NOT_FOUND).send({ message: 'Пользователь с таким Id не найден' });
-        } else {
-          res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
-        }
+        res.status(ERROR_NOT_FOUND).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(ERROR_SERVER).send({ message: 'Ошибка по умолчанию' });
       }
     });
 };
