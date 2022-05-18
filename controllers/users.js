@@ -40,6 +40,8 @@ module.exports.createUser = (req, res) => {
     name,
     about,
     avatar,
+    email,
+    password,
   })
     .then((data) => {
       res.send(data);
