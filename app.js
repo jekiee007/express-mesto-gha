@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
+const { createUser, login } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -22,6 +25,9 @@ app.use((req, res, next) => {
 
 app.use('/', cards);
 app.use('/', users);
+
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.use((req, res) => {
   res.status(404).send({ message: 'Not found' });

@@ -19,7 +19,7 @@ module.exports.getUsers = (req, res) => {
     });
 };
 
-// GET /users/:userId - возвращает пользователя по _id
+// GET /users/me - возвращает пользователя по _id
 module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((data) => {
@@ -70,10 +70,10 @@ module.exports.login = (req, res) => {
       // вернём токен
       res.send({ token });
     })
-    .catch((err) => {
+    .catch(() => {
       res
         .status(401)
-        .send({ message: err.message });
+        .send({ message: 'Отказано в доступе' });
     });
 };
 
@@ -117,3 +117,5 @@ module.exports.updateUserAvatar = (req, res) => {
       }
     });
 };
+
+// GET /users/me - возвращает информацию о текущем пользователе
